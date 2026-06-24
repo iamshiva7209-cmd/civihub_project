@@ -1,0 +1,90 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<!-- BACKGROUND VIDEO (RAW, NO OVERLAYS) -->
+<video
+    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;"
+    src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4"
+    autoplay
+    loop
+    muted
+    playsinline
+></video>
+
+<div class="login-page">
+
+<div class="login-left">
+
+<h1>CIVIHUB</h1>
+
+<p>
+Professional Network for Civil Engineers  
+Showcase your projects • Connect with experts • Get hired
+</p>
+
+<ul>
+
+<li>Create technical portfolio</li>
+<li>Find freelance opportunities</li>
+<li>Connect with industry professionals</li>
+<li>Collaborate on engineering projects</li>
+
+</ul>
+
+</div>
+
+
+<div class="login-right">
+
+<form class="pro-form" method="POST">
+
+<h2>Welcome Back</h2>
+
+<p class="subtitle">
+Login to continue your professional journey
+</p>
+
+{% if error %}
+<div style="background: rgba(166,28,28,0.2); border: 1px solid rgba(166,28,28,0.5); color: #ff8888; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+    {{ error }}
+</div>
+{% endif %}
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input name="email" required>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input type="password" name="password" required>
+
+</div>
+
+
+<button class="primary-btn">
+
+Login
+
+</button>
+
+
+<div class="login-link">
+
+New to CIVIHUB?
+
+<a href="/register">Create account</a>
+
+</div>
+
+
+</form>
+
+</div>
+
+</div>

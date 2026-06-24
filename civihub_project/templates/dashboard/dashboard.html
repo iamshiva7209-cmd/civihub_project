@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIVIHUB - The Nexus of Engineering</title>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background-color: transparent; color: #333333; }
+
+        /* NAVIGATION BAR */
+        header { 
+            background: rgba(10,12,20,0.58);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            box-shadow: inset 0 2px 6px rgba(255,255,255,0.05), inset 0 -3px 10px rgba(0,0,0,0.5), 0 4px 20px rgba(0,0,0,0.4);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 5%; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+            height: 65px;
+        }
+        .logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-text h1 { font-size: 21px; font-weight: 800; color: #e8eaf6; letter-spacing: -0.5px; margin: 0; line-height: 1.1; }
+        .logo-text span { font-size: 10px; color: #8899bb; font-weight: 500; display: block; margin-top: 1px; }
+        nav { display: flex; align-items: center; }
+        nav a { text-decoration: none; color: #aab4cc; font-weight: 500; font-size: 14px; transition: all 0.2s; padding: 6px 0; border-bottom: 2px solid transparent; }
+        nav a:hover { color: #e74c3c; }
+        nav a.active { color: #e74c3c; border-bottom: 2px solid #e74c3c; font-weight: 600; }
+        .nav-separator { color: rgba(255,255,255,0.15); margin: 0 12px; font-size: 14px; font-weight: 300; }
+
+        /* HERO SECTION */
+        .hero { 
+            background: linear-gradient(to right, rgba(17, 24, 39, 0.95) 30%, rgba(17, 24, 39, 0.6) 65%, rgba(17, 24, 39, 0.15) 100%), url('/static/images/construction-bg.jpg') no-repeat center center/cover; 
+            padding: 50px 5%; 
+            color: white; 
+            min-height: 260px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #d1d5db;
+        }
+        .hero-content { max-width: 600px; }
+        .hero-content h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
+        .hero-content p { font-size: 14px; opacity: 0.9; margin-bottom: 20px; line-height: 1.6; color: #e5e7eb; }
+        
+        /* BUTTONS */
+        .btn-red { 
+            background: #A61C1C; 
+            color: white; 
+            border: none; 
+            padding: 10px 22px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            text-decoration: none; 
+            display: inline-block; 
+            box-shadow: 0 2px 4px rgba(166, 28, 28, 0.25);
+        }
+        .btn-red:hover { 
+            background: #851414; 
+            box-shadow: 0 4px 8px rgba(166, 28, 28, 0.4); 
+        }
+
+        /* MAIN LAYOUT CONTAINER */
+        .main-container { 
+            display: grid; 
+            grid-template-columns: 2.2fr 1.5fr 1.3fr; 
+            gap: 20px; 
+            padding: 25px 5%; 
+            max-width: 1440px; 
+            margin: 0 auto; 
+        }
+
+        /* COLUMNS */
+        .feed-column { min-width: 0; }
+        .discussions-column { min-width: 0; }
+        .sidebar-column { min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+
+        /* TABS */
+        .feed-tabs-container {
+            background: rgba(8,10,20,0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 8px 8px 0 0;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-bottom: none;
+            padding: 12px 20px 0 20px;
+            box-shadow: inset 0 2px 6px rgba(255,255,255,0.04), inset 0 -3px 10px rgba(0,0,0,0.5);
+        }
+        .feed-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .feed-tab { background: none; border: none; font-size: 13.5px; font-weight: 600; color: #8899bb; margin-right: 25px; cursor: pointer; padding-bottom: 10px; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .feed-tab:hover { color: #e74c3c; }
+        .feed-tab.active { color: #e74c3c; border-bottom: 2px solid #e74c3c; font-weight: 700; }
+
+        /* CARD COMPONENT */
+        .card { background: rgba(8,10,20,0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); border-top: 1px solid rgba(255,255,255,0.15); padding: 20px; margin-bottom: 20px; box-shadow: inset 0 2px 8px rgba(255,255,255,0.04), inset 0 -4px 16px rgba(0,0,0,0.55), 0 10px 30px rgba(0,0,0,0.45); color: #dde2ee; }
+        .feed-card { border-top-left-radius: 0; border-top-right-radius: 0; border-top: none; }
+        
+        .card-title-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .card-title-header h3 { font-size: 13.5px; font-weight: 700; color: #dde6f8; }
+
+        /* USER INFO */
+        .profile-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); }
+        .user-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .user-info-text h4 { font-size: 13.5px; font-weight: 700; color: #dde6f8; display: flex; align-items: center; gap: 5px; }
+        .user-info-text span { font-size: 11px; color: #8899bb; display: block; margin-top: 1px; font-weight: 400; }
+        
+        .verified-badge { 
+            background: rgba(166,28,28,0.18); 
+            color: #e07070; 
+            font-size: 10.5px; 
+            padding: 2px 10px; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 4px; 
+            margin-top: 3px;
+            border: 1px solid rgba(166,28,28,0.3);
+        }
+
+        /* POST ELEMENTS */
+        .post-banner { width: 100%; height: 210px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; background: rgba(255,255,255,0.04); }
+        .post-title-text { font-size: 14.5px; font-weight: 700; margin-bottom: 6px; color: #dde6f8; }
+        .post-desc-text { font-size: 12.5px; color: #8899bb; line-height: 1.5; margin-bottom: 12px; }
+        .post-link { color: #e74c3c; text-decoration: none; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+        .post-link:hover { text-decoration: underline; }
+
+        /* STATS / FOOTER OF POSTS */
+        .post-stats-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 10px; margin-top: 12px; }
+        .stat-group { display: flex; align-items: center; gap: 15px; }
+        .stat-item { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: #8899bb; }
+
+        /* POST CREATOR */
+        .post-creator-box input[type="text"],
+        .post-creator-box input[type="url"] { width: 100%; padding: 8px 10px; margin-top: 6px; border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; font-size: 13px; outline: none; background: rgba(255,255,255,0.06); color: #dde6f8; box-shadow: inset 0 2px 6px rgba(0,0,0,0.4); }
+        .post-creator-box textarea { width: 100%; height: 70px; border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 8px 10px; font-size: 13px; resize: none; margin-top: 6px; outline: none; background: rgba(255,255,255,0.06); color: #dde6f8; box-shadow: inset 0 2px 6px rgba(0,0,0,0.4); }
+        .tag-select { width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; font-size: 12.5px; color: #8899bb; margin-top: 6px; background: rgba(255,255,255,0.06); outline: none; }
+        .creator-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+        .icon-actions { display: flex; gap: 12px; }
+        .icon-action-btn { background: none; border: none; color: #8899bb; cursor: pointer; font-size: 15px; }
+        .icon-action-btn:hover { color: #e74c3c; }
+
+        /* DISCUSSIONS */
+        .discussion-item { display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .discussion-item:last-child { border-bottom: none; }
+        .discussion-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+        .discussion-content { flex: 1; min-width: 0; }
+        .discussion-user-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+        .discussion-user-name { font-size: 12.5px; font-weight: 700; color: #dde6f8; }
+        .discussion-user-title { font-size: 10.5px; color: #8899bb; margin-left: 4px; font-weight: 400; }
+        .discussion-text { font-size: 12px; color: #aab4cc; line-height: 1.4; margin-bottom: 6px; }
+        .discussion-stats { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #6677aa; }
+        .discussion-thumbnails { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; }
+        .discussion-thumbnail { width: 100%; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.08); }
+
+        /* COMMUNITY USERS IN SIDEBAR */
+        .com-user { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .com-user:last-child { border-bottom: none; }
+        .com-info { display: flex; align-items: center; gap: 10px; min-width: 0; }
+        .com-info-text { min-width: 0; }
+        .com-info-text h5 { font-size: 12.5px; font-weight: 700; color: #dde6f8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .com-info-text p { font-size: 10.5px; color: #8899bb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .status-dot { width: 7px; height: 7px; background: #48bb78; border-radius: 50%; flex-shrink: 0; }
+        
+        .btn-chat-sidebar { 
+            width: 100%; 
+            margin-top: 12px; 
+            padding: 9px; 
+            font-size: 12.5px; 
+            font-weight: 600; 
+            background: #A61C1C; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            text-align: center; 
+        }
+        .btn-chat-sidebar:hover { background: #851414; }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .main-container { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+            header { flex-direction: column; gap: 10px; padding: 10px; height: auto; }
+            nav { gap: 12px; }
+            .hero-content h1 { font-size: 26px; }
+            .hero { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body style="position: relative; min-height: 100vh;">
+
+    <!-- BACKGROUND VIDEO (RAW, NO OVERLAYS) -->
+    <video
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+    ></video>
+
+    <!-- HEADER -->
+    <header>
+        <a href="/" class="logo-container">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 2L4 9V23L16 30L28 23V9L16 2Z" fill="#A61C1C"/>
+                <path d="M16 6L25 11.2V20.8L16 26L7 20.8V11.2L16 6Z" fill="#fff"/>
+                <path d="M16 9L22 12.5V19.5L16 23L10 19.5V12.5L16 9Z" fill="#A61C1C"/>
+            </svg>
+            <div class="logo-text">
+                <h1>CIVIHUB</h1>
+                <span>The Nexus of Civil Action</span>
+            </div>
+        </a>
+        <nav>
+            <a href="/dashboard" class="active">Dashboard</a>
+            <span class="nav-separator">|</span>
+            <a href="/ai" style="display:inline-flex; align-items:center; gap:5px;">🧠 Primus 1</a>
+            <span class="nav-separator">|</span>
+            <a href="/jobs">Jobs</a>
+            <span class="nav-separator">|</span>
+            <a href="/chat">Chat</a>
+            <span class="nav-separator">|</span>
+            <a href="/profile">Profile</a>
+            <span class="nav-separator">|</span>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Share Your Civil Engineering Achievements</h1>
+            <p>Post your daily work updates, project milestones, and industry insights. Connect with fellow professionals and collaborate on real opportunities.</p>
+            <a href="#post-creator" class="btn-red">Post Update</a>
+        </div>
+    </section>
+
+    <!-- MAIN BODY GRID SECTION -->
+    <div class="main-container">
+
+        <!-- COLUMN 1: FEED -->
+        <main class="feed-column">
+            <div class="feed-tabs-container">
+                <div class="feed-tabs">
+                    <button class="feed-tab active">Your Feed</button>
+                    <button class="feed-tab">Projects</button>
+                    <button class="feed-tab">Forums</button>
+                </div>
+            </div>
+
+            <!-- First Post Card (Arjun Rao - Skyscraper Model) -->
+            <div class="card feed-card" style="border-radius: 0 0 8px 8px; margin-bottom: 20px;">
+                <div class="user-header">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" class="profile-img" alt="Arjun Rao">
+                    <div class="user-info-text">
+                        <h4>Arjun Rao <span style="font-weight: normal; color:#718096; font-size:11px; margin-left: 5px;">• 2min</span></h4>
+                        <div class="verified-badge" style="background: {{ grade.color }}22; color: {{ grade.color }}; border-color: {{ grade.color }}44;">
+                            <span>⭐</span> Grade {{ grade.letter }} · {{ grade.label }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- High-quality skyscraper preview matching the mockup main image -->
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" class="post-banner" alt="High-Rise Model">
+
+                <div class="post-title-text">High-Rise Commercial Tower – Revit Model <span style="font-weight: normal; color: #718096; font-size: 11px; margin-left: 6px;">📍 2min</span></div>
+                <div class="post-desc-text">Completed the BIM modeling for the main load-bearing structure. Structural analysis shows excellent stability under wind load loads.</div>
+
+                <a href="#" class="post-link" onclick="alert('Viewing Blueprint Link')">View Live Blueprint Link &rarr;</a>
+
+                <!-- Footer stats -->
+                <div class="post-stats-footer">
+                    <div class="stat-group">
+                        <span class="stat-item">👁️ 256</span>
+                        <span class="stat-item">💬 18</span>
+                        <span class="stat-item">👍 5</span>
+                    </div>
+                    <span class="stat-item" style="cursor: pointer;" title="Bookmark post">⭐</span>
+                </div>
+            </div>
+
+            <!-- Second Post Card (Navya Sharma - Bridge Structure) -->
+            <div class="card" style="margin-bottom: 20px; border-radius: 8px;">
+                <div class="user-header">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" class="profile-img" alt="Navya Sharma">
+                    <div class="user-info-text">
+                        <h4>Navya Sharma <span style="font-weight: normal; color:#718096; font-size:11px; margin-left: 5px;">• hr ago</span></h4>
+                        <span style="font-size: 11px; color: #718096; display: block; margin-top: 1px;">Civil Engineer</span>
+                    </div>
+                </div>
+
+                <div class="post-title-text">STAAD Analysis of Bridge Structure <span style="font-weight: normal; color: #718096; font-size: 11px; margin-left: 6px;">📍 hr ago</span></div>
+                <div class="post-desc-text">Performed finite element modeling of the main suspension span. Load combinations show stresses are well within allowable limits.</div>
+
+                <a href="#" class="post-link" onclick="alert('Viewing STAAD Report')">View STAAD Report &rarr;</a>
+
+                <!-- Footer stats -->
+                <div class="post-stats-footer">
+                    <div class="stat-group">
+                        <span class="stat-item">👁️ 226</span>
+                        <span class="stat-item">💬 15</span>
+                        <span class="stat-item">👍 6</span>
+                    </div>
+                    <span class="stat-item" style="cursor: pointer;" title="Bookmark post">⭐</span>
+                </div>
+            </div>
+
+            <!-- Dynamic Posts from database -->
+            {% for proj in projects %}
+            <!-- Skip rendering if the title matches our static card above to avoid duplicate feel -->
+            {% if proj.project_title != "High-Rise Commercial Tower – Revit Model" and proj.project_title != "STAAD Analysis of Bridge Structure" %}
+            <div class="card" style="margin-bottom: 20px; border-radius: 8px;">
+                <div class="user-header">
+                    {% if proj.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/profile_images/' + proj.profile_image) }}" class="profile-img" alt="User Avatar">
+                    {% else %}
+                        <div class="profile-img" style="background: rgba(166,28,28,0.25); display:flex; align-items:center; justify-content:center; font-weight:bold; color:#e07070; font-size: 13px;">
+                            {{ proj.username[0]|upper }}
+                        </div>
+                    {% endif %}
+                    <div class="user-info-text">
+                        <h4>{{ proj.username }} <span style="font-weight: normal; color:#718096; font-size:11px; margin-left: 5px;">• hr ago</span></h4>
+                        <div class="verified-badge" style="background: {{ grade.color }}22; color: {{ grade.color }}; border-color: {{ grade.color }}44;">
+                            <span>⭐</span> Grade {{ grade.letter }} · {{ grade.label }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Styled blueprint grid placeholder for dynamic uploads -->
+                <div class="post-banner" style="background: linear-gradient(135deg, #1e293b, #0f172a); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; border: 1px solid #1e293b; padding: 20px; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; width: 100%; height: 100%; border: 1px dashed rgba(255,255,255,0.03); top:0; left:0; pointer-events: none;"></div>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 8px; opacity: 0.5;">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M9 3v18M15 3v18M3 9h18M3 15h18" stroke-dasharray="2 2"/>
+                        <path d="M3 21L21 3" />
+                    </svg>
+                    <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;">Structural Blueprint Link</span>
+                </div>
+
+                <div class="post-title-text">{{ proj.project_title }}</div>
+                <div class="post-desc-text">{{ proj.project_description }}</div>
+
+                {% if proj.project_link %}
+                    <a href="{{ proj.project_link }}" target="_blank" class="post-link">View Live Blueprint Link &rarr;</a>
+                {% endif %}
+
+                <!-- Footer stats -->
+                <div class="post-stats-footer">
+                    <div class="stat-group">
+                        <span class="stat-item">👁️ 226</span>
+                        <span class="stat-item">💬 15</span>
+                        <span class="stat-item">👍 6</span>
+                    </div>
+                    <span class="stat-item" style="cursor: pointer;">⭐</span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </main>
+
+        <!-- COLUMN 2: FORUM DISCUSSIONS -->
+        <section class="discussions-column">
+            <div class="card" style="padding-bottom: 12px; border-radius: 8px;">
+                <div class="card-title-header">
+                    <h3>CIVIHUB Community</h3>
+                    <span style="font-size: 11px; color: #718096; cursor:pointer; font-weight: 500;">● Yea's Experience ▾</span>
+                </div>
+
+                <!-- Discussion Comment 1 -->
+                <div class="discussion-item">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80" class="discussion-avatar" alt="Anil Mehta">
+                    <div class="discussion-content">
+                        <div class="discussion-user-meta">
+                            <span class="discussion-user-name">Anil Mehta <span class="discussion-user-title">Construction Manager</span></span>
+                            <span style="font-size:10px; color:#a0aec0;">2h</span>
+                        </div>
+                        <p class="discussion-text">Great design! Can you tell what type of soil this high-rise uses?</p>
+                        <div class="discussion-stats">
+                            <span>👁️ 226</span> <span>💬 15</span> <span>👍 6</span> <span style="font-weight:600; color:#A61C1C; cursor:pointer;">2 Replies</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discussion Comment 2 -->
+                <div class="discussion-item">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=150&q=80" class="discussion-avatar" alt="S. Reddy">
+                    <div class="discussion-content">
+                        <div class="discussion-user-meta">
+                            <span class="discussion-user-name">S. Reddy <span class="discussion-user-title">Project Engineer</span></span>
+                            <span style="font-size:10px; color:#a0aec0;">4h</span>
+                        </div>
+                        <p class="discussion-text">Is there any opening for a site engineer in this project?</p>
+                        <div class="discussion-stats">
+                            <span>👁️ 192</span> <span>💬 11</span> <span>👍 3</span> <span style="font-weight:600; color:#A61C1C; cursor:pointer;">3 Replies</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discussion Comment 3 -->
+                <div class="discussion-item">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" class="discussion-avatar" alt="Priya Sharma">
+                    <div class="discussion-content">
+                        <div class="discussion-user-meta">
+                            <span class="discussion-user-name">Priya Sharma <span class="discussion-user-title">HR Manager</span></span>
+                            <span style="font-size:10px; color:#a0aec0;">6h</span>
+                        </div>
+                        <p class="discussion-text">Please share your updated CV if you're looking for opportunities in the Bangalore region.</p>
+                        <div class="discussion-stats">
+                            <span>👁️ 140</span> <span>💬 8</span> <span>👍 12</span> <span style="font-weight:600; color:#A61C1C; cursor:pointer;">1 Reply</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Site Progress Preview Thumbnails -->
+                <div class="discussion-thumbnails">
+                    <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=120&q=80" class="discussion-thumbnail" alt="Site Progress">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=120&q=80" class="discussion-thumbnail" alt="Rebar Detail">
+                    <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&w=120&q=80" class="discussion-thumbnail" alt="Engineering Team">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=120&q=80" class="discussion-thumbnail" alt="High-Rise Render">
+                </div>
+            </div>
+        </section>
+
+        <!-- COLUMN 3: SIDEBAR -->
+        <aside class="sidebar-column">
+
+            <!-- POST AN UPDATE CARD -->
+            <div class="card post-creator-box" id="post-creator" style="border-radius: 8px;">
+                <div class="card-title-header" style="margin-bottom: 10px; border-bottom: none; padding-bottom: 0;">
+                    <h3>Post an Update</h3>
+                </div>
+
+                <!-- User profile meta in creator card -->
+                <div class="user-header" style="margin-bottom: 8px;">
+                    {% if user.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/profile_images/' + user.profile_image) }}" class="profile-img" alt="Avatar">
+                    {% else %}
+                        <div class="profile-img" style="background: rgba(166,28,28,0.25); display:flex; align-items:center; justify-content:center; font-weight:bold; color:#e07070; font-size:13px;">
+                            {{ user.username[0]|upper }}
+                        </div>
+                    {% endif %}
+                    <div class="user-info-text">
+                        <h4>{{ user.username }}</h4>
+                        <div class="verified-badge" style="background: {{ grade.color }}22; color: {{ grade.color }}; border-color: {{ grade.color }}44;">
+                            <span>⭐</span> Grade {{ grade.letter }} · {{ grade.label }}
+                        </div>
+                    </div>
+                </div>
+
+                <form action="{{ url_for('add_project') }}" method="POST"> 
+                    <input type="text" name="project_title" placeholder="Title of your project milestone..." required>
+                    <input type="url" name="project_link" placeholder="Project or CAD link (Optional)">
+                    <textarea name="project_description" placeholder="Share your work update..." required></textarea>
+                    
+                    <select class="tag-select">
+                        <option>#ConstructionSite, AutoCAD</option>
+                        <option>#STAAD_Pro, Analysis</option>
+                        <option>#Geotechnical_Testing</option>
+                    </select>
+
+                    <div class="creator-footer">
+                        <div class="icon-actions">
+                            <span class="icon-action-btn" title="Email updates">✉️</span>
+                            <span class="icon-action-btn" title="Attach blueprint file">📁</span>
+                            <span class="icon-action-btn" title="Add rating">⭐</span>
+                        </div>
+                        <button type="submit" class="btn-red" style="padding: 7px 18px; font-size: 12.5px;">Post Update</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- CIVIHUB COMMUNITY MEMBERS LIST -->
+            <div class="card" style="border-radius: 8px;">
+                <div class="card-title-header">
+                    <h3>CIVIHUB Community</h3>
+                    <span style="font-size: 12px; color: #718096; cursor: pointer;">⚙️</span>
+                </div>
+                
+                {% if community_users %}
+                    {% for c_user in community_users %}
+                        <div class="com-user" onclick="window.location.href='/chat/{{ c_user.id }}'" style="cursor: pointer; padding: 6px; border-radius: 6px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='transparent'">
+                            <div class="com-info">
+                                {% if c_user.profile_image %}
+                                    <img src="{{ url_for('static', filename='uploads/profile_images/' + c_user.profile_image) }}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover;">
+                                {% else %}
+                                    <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(166,28,28,0.25); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; color: #e07070;">
+                                        {{ c_user.username[0]|upper }}
+                                    </div>
+                                {% endif %}
+                                <div class="com-info-text">
+                                    <h5>{{ c_user.username }}</h5>
+                                    <p>{% if c_user.location %}{{ c_user.location }}{% else %}Civil Specialist{% endif %}</p>
+                                </div>
+                            </div>
+                            <div class="status-dot"></div>
+                        </div>
+                    {% endfor %}
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11px; color: #718096;">
+                        <span>Active status online</span>
+                        <span style="color: #A61C1C; font-weight: 600; cursor: pointer;" onclick="window.location.href='/chat'">+8 more</span>
+                    </div>
+                {% else %}
+                    <p style="font-size: 12px; color: #718096; padding: 10px 0; text-align: center;">No other users online.</p>
+                {% endif %}
+
+                <button class="btn-chat-sidebar" onclick="window.location.href='/chat'">
+                    Start a New Chat
+                </button>
+            </div>
+
+        </aside>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# IDEs
+.idea/
+.vscode/
+
+# Node / JS dependencies
+node_modules/
+
+# Large installers / executables
+*.msi
+*.exe
+civihub_project/mysql-9.6.0-winx64.msi
+civihub_project/13.3.0.exe
+
+# Local database data
+civihub_project/mysql_data/

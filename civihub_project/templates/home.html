@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIVIHUB - The Civil Engineering Network</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #000000;
+        }
+
+        .liquid-glass {
+            background: rgba(0, 0, 0, 0.4);
+            background-blend-mode: luminosity;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: none;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .liquid-glass::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1.4px;
+            background: linear-gradient(180deg,
+                rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 20%,
+                rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+                rgba(255,255,255,0.1) 80%, rgba(255,255,255,0.3) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in-sub {
+            opacity: 0;
+            animation: fadeIn 1000ms forwards;
+            animation-delay: 800ms;
+        }
+
+        .fade-in-buttons {
+            opacity: 0;
+            animation: fadeIn 1000ms forwards;
+            animation-delay: 1200ms;
+        }
+
+        .fade-in-tag {
+            opacity: 0;
+            animation: fadeIn 1000ms forwards;
+            animation-delay: 1400ms;
+        }
+    </style>
+</head>
+<body class="relative w-screen min-h-screen text-white overflow-hidden select-none">
+
+    <!-- BACKGROUND VIDEO (RAW, NO OVERLAYS) -->
+    <video
+        class="absolute top-0 left-0 w-full h-full object-cover z-0 pointer-events-none"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+    ></video>
+
+    <!-- MAIN PAGE WRAPPER -->
+    <div class="relative z-10 w-full min-h-screen flex flex-col justify-between">
+        
+        <!-- NAVBAR -->
+        <header class="w-full px-6 md:px-12 lg:px-16 pt-6">
+            <div class="liquid-glass rounded-xl px-4 py-2 flex items-center justify-between">
+                <!-- Left: Logo -->
+                <a href="/" class="text-2xl font-semibold tracking-tight text-white select-none">
+                    CIVIHUB
+                </a>
+
+                <!-- Center: Links (Hidden on Mobile) -->
+                <nav class="hidden md:flex items-center gap-8">
+                    {% if session.get('user_id') %}
+                        <a href="/dashboard" class="text-sm font-medium text-white/95 hover:text-gray-300 transition-colors">
+                            Dashboard
+                        </a>
+                        <a href="/jobs" class="text-sm font-medium text-white/95 hover:text-gray-300 transition-colors">
+                            Jobs
+                        </a>
+                        <a href="/chat" class="text-sm font-medium text-white/95 hover:text-gray-300 transition-colors">
+                            Chat
+                        </a>
+                        <a href="/profile" class="text-sm font-medium text-white/95 hover:text-gray-300 transition-colors">
+                            Profile
+                        </a>
+                    {% endif %}
+                </nav>
+
+                <!-- Right: Action Button -->
+                {% if session.get('user_id') %}
+                    <a href="/logout" class="bg-white text-black px-6 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-all active:scale-[0.98]">
+                        Logout
+                    </a>
+                {% else %}
+                    <div class="flex items-center gap-6">
+                        <a href="/register" class="text-base md:text-lg font-medium text-white/95 hover:text-gray-300 transition-colors">
+                            Join Network
+                        </a>
+                        <a href="/login" class="text-base md:text-lg font-medium text-white/95 hover:text-gray-300 transition-colors">
+                            Login
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- HERO CONTENT (Pushed to bottom) -->
+        <div class="w-full px-6 md:px-12 lg:px-16 pb-12 lg:pb-16 flex-1 flex flex-col justify-end">
+            <div class="lg:grid lg:grid-cols-2 lg:items-end gap-12 lg:gap-8">
+                
+                <!-- Left Column: Heading and Description -->
+                <div>
+                    <!-- Animated Heading Container -->
+                    <h1 id="animated-heading" class="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal mb-4" style="letter-spacing: -0.04em;">
+                        <!-- Character spans will be injected by JavaScript -->
+                    </h1>
+
+                    <div class="fade-in-sub">
+                        <p class="text-base md:text-lg text-gray-300 mb-5 max-w-lg leading-relaxed">
+                            Showcase your structural blueprints, share construction milestones, collaborate with industry leaders, and build your engineering career.
+                        </p>
+                    </div>
+
+                    <div class="fade-in-buttons">
+                        <div class="flex flex-wrap gap-4">
+                            {% if session.get('user_id') %}
+                                <a href="/chat" class="bg-white text-black px-8 py-3 rounded-lg font-medium text-sm hover:bg-gray-100 transition-all active:scale-[0.98]">
+                                    Start a Chat
+                                </a>
+                                <a href="/dashboard" class="liquid-glass border border-white/20 text-white px-8 py-3 rounded-lg font-medium text-sm hover:bg-white hover:text-black transition-all active:scale-[0.98]">
+                                    Dashboard
+                                </a>
+                            {% else %}
+                                <a href="/register" class="bg-white text-black px-8 py-3 rounded-lg font-medium text-sm hover:bg-gray-100 transition-all active:scale-[0.98]">
+                                    Join Network
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Glass Card Tag -->
+                <div class="flex items-end justify-start lg:justify-end mt-8 lg:mt-0">
+                    <div class="fade-in-tag w-full lg:w-auto">
+                        <div class="liquid-glass border border-white/20 px-6 py-3 rounded-xl w-full lg:w-auto text-center lg:text-left select-none">
+                            <p class="text-lg md:text-xl lg:text-2xl font-light text-white tracking-wide">
+                                Design. Engineering. Construction.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Animation script for text entrance -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const text = "Where Structures\nMeet Stories.";
+            const container = document.getElementById("animated-heading");
+            const lines = text.split("\n");
+            const charDelay = 30; // ms
+            const initialDelay = 200; // ms
+            const transitionDuration = 500; // ms
+            
+            lines.forEach((line, lineIndex) => {
+                const lineDiv = document.createElement("div");
+                lineDiv.className = "block whitespace-nowrap";
+                
+                const lineLength = line.length;
+                const chars = line.split("");
+                
+                chars.forEach((char, charIndex) => {
+                    const span = document.createElement("span");
+                    span.style.display = "inline-block";
+                    span.style.opacity = "0";
+                    span.style.transform = "translateX(-18px)";
+                    span.style.transition = `opacity ${transitionDuration}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${transitionDuration}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+                    span.innerHTML = char === " " ? "&nbsp;" : char;
+                    
+                    // Delay calculation matching: (lineIndex * lineLength * charDelay) + (charIndex * charDelay)
+                    const tDelay = (lineIndex * lineLength * charDelay) + (charIndex * charDelay);
+                    
+                    lineDiv.appendChild(span);
+                    
+                    // Trigger character animation
+                    setTimeout(() => {
+                        span.style.transitionDelay = `${tDelay}ms`;
+                        span.style.opacity = "1";
+                        span.style.transform = "translateX(0)";
+                    }, initialDelay);
+                });
+                
+                container.appendChild(lineDiv);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<!-- BACKGROUND VIDEO (RAW, NO OVERLAYS) -->
+<video
+    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;"
+    src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4"
+    autoplay
+    loop
+    muted
+    playsinline
+></video>
+
+<div class="register-page">
+
+<div class="register-left">
+
+<h1>CIVIHUB</h1>
+
+<p>
+Professional Network for Civil Engineers
+</p>
+
+<ul>
+<li>Build project portfolio</li>
+<li>Connect with engineers</li>
+<li>Find freelance jobs</li>
+<li>Showcase technical skills</li>
+</ul>
+
+</div>
+
+
+<div class="register-right">
+
+<form class="pro-form" method="POST"
+enctype="multipart/form-data"
+onsubmit="return validateForm()">
+
+<h2>Create Professional Account</h2>
+
+
+<div class="section-title">Personal Information</div>
+
+<div class="form-grid-3">
+
+<div>
+<input id="username" name="username" placeholder="Full Name">
+<small class="error" id="nameError"></small>
+</div>
+
+<div>
+<input id="email" name="email" placeholder="Email">
+<small class="error" id="emailError"></small>
+</div>
+
+<div>
+<input id="password" type="password" name="password" placeholder="Password">
+<small class="error" id="passError"></small>
+</div>
+
+<div>
+<input id="phone" name="phone" placeholder="Phone">
+<small class="error" id="phoneError"></small>
+</div>
+
+<div>
+<input id="location" name="location" placeholder="Location">
+</div>
+
+<div>
+<input id="experience" name="experience" placeholder="Experience (years)">
+<small class="error" id="expError"></small>
+</div>
+
+</div>
+
+
+
+<div class="section-title">Professional Details</div>
+
+<div class="form-grid-2">
+
+<div>
+<input id="skills" name="skills" placeholder="Skills">
+<small class="error" id="skillsError"></small>
+</div>
+
+<input name="qualifications" placeholder="Qualifications">
+
+</div>
+
+<input name="portfolio" placeholder="Portfolio link (optional)">
+
+
+
+<div class="section-title">Projects (Optional)</div>
+
+<div id="project-container">
+
+<div class="project-box">
+
+<input name="project_title[]" placeholder="Project Title">
+
+<input name="project_link[]" placeholder="Project Link">
+
+<textarea name="project_description[]" placeholder="Project Description"></textarea>
+
+</div>
+
+</div>
+
+
+<button type="button" class="add-btn" onclick="addProject()">
++ Add Project
+</button>
+
+
+
+<div class="section-title">Documents</div>
+
+<div class="upload-grid-wide">
+
+<div class="upload-box">
+
+<label>Profile Image</label>
+
+<input type="file" id="image" name="profile_image">
+
+<small class="error" id="imgError"></small>
+
+</div>
+
+
+<div class="upload-box">
+
+<label>Resume PDF</label>
+
+<input type="file" id="resume" name="resume">
+
+<small class="error" id="resumeError"></small>
+
+</div>
+
+</div>
+
+
+
+<button class="primary-btn">Create Account</button>
+
+
+<div class="login-link">
+
+Already have account?
+<a href="/">Login</a>
+
+</div>
+
+
+</form>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+/* ADD PROJECT FIELD */
+
+function addProject(){
+
+let html = `
+
+<div class="project-box">
+
+<input name="project_title[]" placeholder="Project Title">
+
+<input name="project_link[]" placeholder="Project Link">
+
+<textarea name="project_description[]" placeholder="Project Description"></textarea>
+
+</div>
+
+`;
+
+document.getElementById("project-container")
+.insertAdjacentHTML("beforeend",html);
+
+}
+
+
+
+/* VALIDATION */
+
+function validateForm(){
+
+let valid = true;
+
+/* clear errors */
+
+document.querySelectorAll(".error").forEach(e=>e.innerText="");
+
+
+let name = document.getElementById("username").value.trim();
+
+let email = document.getElementById("email").value.trim();
+
+let password = document.getElementById("password").value;
+
+let phone = document.getElementById("phone").value.trim();
+
+let experience = document.getElementById("experience").value.trim();
+
+let skills = document.getElementById("skills").value.trim();
+
+let image = document.getElementById("image").value;
+
+let resume = document.getElementById("resume").value;
+
+
+/* NAME */
+
+if(name.length < 3){
+
+document.getElementById("nameError").innerText="Enter valid name";
+
+valid=false;
+
+}
+
+
+/* EMAIL */
+
+let emailPattern=/^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+if(!email.match(emailPattern)){
+
+document.getElementById("emailError").innerText="Invalid email";
+
+valid=false;
+
+}
+
+
+/* PASSWORD */
+
+let passPattern=/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
+if(!password.match(passPattern)){
+
+document.getElementById("passError").innerText="Min 6 chars with number";
+
+valid=false;
+
+}
+
+
+/* PHONE */
+
+let phonePattern=/^[0-9]{10}$/;
+
+if(phone && !phone.match(phonePattern)){
+
+document.getElementById("phoneError").innerText="Enter 10 digit number";
+
+valid=false;
+
+}
+
+
+/* EXPERIENCE */
+
+if(experience && isNaN(experience)){
+
+document.getElementById("expError").innerText="Enter number";
+
+valid=false;
+
+}
+
+
+/* SKILLS */
+
+if(skills.length < 3){
+
+document.getElementById("skillsError").innerText="Enter skills";
+
+valid=false;
+
+}
+
+
+/* IMAGE TYPE */
+
+if(image){
+
+let allowed=["jpg","jpeg","png"];
+
+let ext=image.split(".").pop().toLowerCase();
+
+if(!allowed.includes(ext)){
+
+document.getElementById("imgError").innerText="Only jpg/png";
+
+valid=false;
+
+}
+
+}
+
+
+/* RESUME TYPE */
+
+if(resume){
+
+let ext=resume.split(".").pop().toLowerCase();
+
+if(ext!="pdf"){
+
+document.getElementById("resumeError").innerText="Only PDF allowed";
+
+valid=false;
+
+}
+
+}
+
+
+return valid;
+
+}
+
+</script>
